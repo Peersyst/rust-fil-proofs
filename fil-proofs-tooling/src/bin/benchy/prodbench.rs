@@ -179,6 +179,7 @@ pub fn run(
     let mut outputs = ProdbenchOutputs::default();
 
     let sector_size = SectorSize(inputs.sector_size_bytes());
+    let arbitrary_porep_id = [123; 32];
 
     assert!(inputs.num_sectors > 0, "Missing num_sectors");
 
@@ -186,6 +187,7 @@ pub fn run(
         sector_size,
         inputs.num_sectors as usize,
         only_add_piece,
+        arbitrary_porep_id,
     );
 
     if only_add_piece || only_replicate {
@@ -315,10 +317,12 @@ fn generate_params(i: &ProdbenchInputs) {
         "generating params: porep: (size: {:?}, partitions: {:?})",
         &sector_size, &partitions
     );
+    let dummy_porep_id = [0; 32];
 
     cache_porep_params(PoRepConfig {
         sector_size,
         partitions,
+        porep_id: dummy_porep_id,
     });
 }
 

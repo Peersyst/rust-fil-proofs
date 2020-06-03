@@ -149,8 +149,13 @@ where
         "pieces and comm_d do not match"
     );
 
-    let replica_id =
-        generate_replica_id::<Tree::Hasher, _>(&prover_id, sector_id.into(), &ticket, comm_d);
+    let replica_id = generate_replica_id::<Tree::Hasher, _>(
+        &prover_id,
+        sector_id.into(),
+        &ticket,
+        comm_d,
+        &porep_config.porep_id,
+    );
 
     let labels = StackedDrg::<Tree, DefaultPieceHasher>::replicate_phase1(
         &compound_public_params.vanilla_params,
@@ -327,11 +332,17 @@ pub fn seal_commit_phase1<T: AsRef<Path>, Tree: 'static + MerkleTreeTrait>(
     let comm_r_safe = as_safe_commitment(&comm_r, "comm_r")?;
     let comm_d_safe = DefaultPieceDomain::try_from_bytes(&comm_d)?;
 
-    let replica_id =
-        generate_replica_id::<Tree::Hasher, _>(&prover_id, sector_id.into(), &ticket, comm_d_safe);
+    let replica_id = generate_replica_id::<Tree::Hasher, _>(
+        &prover_id,
+        sector_id.into(),
+        &ticket,
+        comm_d_safe,
+        &porep_config.porep_id,
+    );
 
     let public_inputs = stacked::PublicInputs {
         replica_id,
+        porep_id: porep_config.porep_id,
         tau: Some(stacked::Tau {
             comm_d: comm_d_safe,
             comm_r: comm_r_safe,
@@ -411,6 +422,7 @@ pub fn seal_commit_phase2<Tree: 'static + MerkleTreeTrait>(
 
     let public_inputs = stacked::PublicInputs {
         replica_id,
+        porep_id: porep_config.porep_id,
         tau: Some(stacked::Tau {
             comm_d: comm_d_safe,
             comm_r: comm_r_safe,
@@ -517,8 +529,13 @@ pub fn verify_seal<Tree: 'static + MerkleTreeTrait>(
     let comm_r: <Tree::Hasher as Hasher>::Domain = as_safe_commitment(&comm_r_in, "comm_r")?;
     let comm_d: DefaultPieceDomain = as_safe_commitment(&comm_d_in, "comm_d")?;
 
-    let replica_id =
-        generate_replica_id::<Tree::Hasher, _>(&prover_id, sector_id.into(), &ticket, comm_d);
+    let replica_id = generate_replica_id::<Tree::Hasher, _>(
+        &prover_id,
+        sector_id.into(),
+        &ticket,
+        comm_d,
+        &porep_config.porep_id,
+    );
 
     let compound_setup_params = compound_proof::SetupParams {
         vanilla_params: setup_params(
@@ -537,6 +554,7 @@ pub fn verify_seal<Tree: 'static + MerkleTreeTrait>(
     let public_inputs =
         stacked::PublicInputs::<<Tree::Hasher as Hasher>::Domain, DefaultPieceDomain> {
             replica_id,
+            porep_id: porep_config.porep_id,
             tau: Some(Tau { comm_r, comm_d }),
             seed,
             k: None,
@@ -650,6 +668,7 @@ pub fn verify_batch_seal<Tree: 'static + MerkleTreeTrait>(
             sector_ids[i].into(),
             &tickets[i],
             comm_d,
+            &porep_config.porep_id,
         );
 
         public_inputs.push(stacked::PublicInputs::<
@@ -657,6 +676,7 @@ pub fn verify_batch_seal<Tree: 'static + MerkleTreeTrait>(
             DefaultPieceDomain,
         > {
             replica_id,
+            porep_id: porep_config.porep_id,
             tau: Some(Tau { comm_r, comm_d }),
             seed: seeds[i],
             k: None,

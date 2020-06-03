@@ -11,6 +11,7 @@ use crate::types::*;
 pub struct PoRepConfig {
     pub sector_size: SectorSize,
     pub partitions: PoRepProofPartitions,
+    pub porep_id: [u8; 32],
 }
 
 impl From<PoRepConfig> for PaddedBytesAmount {

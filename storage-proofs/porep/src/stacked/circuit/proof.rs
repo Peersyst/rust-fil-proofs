@@ -443,10 +443,11 @@ mod tests {
         assert_ne!(data, copied, "replication did not change data");
 
         let seed = rng.gen();
-
+        let arbitrary_porep_id = [44; 32];
         let pub_inputs =
             PublicInputs::<<Tree::Hasher as Hasher>::Domain, <Sha256Hasher as Hasher>::Domain> {
                 replica_id: replica_id.into(),
+                porep_id: arbitrary_porep_id,
                 seed,
                 tau: Some(tau.into()),
                 k: None,
@@ -632,10 +633,11 @@ mod tests {
         assert_ne!(data, copied, "replication did not change data");
 
         let seed = rng.gen();
-
+        let arbitrary_porep_id = [55; 32];
         let public_inputs =
             PublicInputs::<<Tree::Hasher as Hasher>::Domain, <Sha256Hasher as Hasher>::Domain> {
                 replica_id: replica_id.into(),
+                porep_id: arbitrary_porep_id,
                 seed,
                 tau: Some(tau),
                 k: None,

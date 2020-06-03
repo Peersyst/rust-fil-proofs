@@ -178,6 +178,7 @@ fn blank_porep_poseidon_circuit<Tree: MerkleTreeTrait>(
     let porep_config = PoRepConfig {
         sector_size: SectorSize(sector_size),
         partitions: PoRepProofPartitions(n_partitions),
+        porep_id: [0; 32],
     };
 
     let setup_params = compound_proof::SetupParams {
