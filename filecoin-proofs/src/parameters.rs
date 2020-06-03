@@ -1,4 +1,5 @@
 use anyhow::{ensure, Result};
+use sha2::{Digest, Sha256};
 use storage_proofs::porep::stacked::{self, LayerChallenges, StackedDrg};
 use storage_proofs::post::fallback;
 use storage_proofs::proof::ProofScheme;
@@ -6,10 +7,10 @@ use storage_proofs::proof::ProofScheme;
 use crate::constants::*;
 use crate::types::{MerkleTreeTrait, PaddedBytesAmount, PoStConfig};
 
-const DRG_SEED: [u8; 28] = [
+const DRG_NONCE: [u8; 32] = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-    26, 27,
-]; // Arbitrary, need a theory for how to vary this over time.
+    26, 27, 28, 30, 30, 31,
+];
 
 type WinningPostSetupParams = fallback::SetupParams;
 pub type WinningPostPublicParams = fallback::PublicParams;
@@ -20,8 +21,13 @@ pub type WindowPostPublicParams = fallback::PublicParams;
 pub fn public_params<Tree: 'static + MerkleTreeTrait>(
     sector_bytes: PaddedBytesAmount,
     partitions: usize,
+    porep_id: [u8; 32],
 ) -> Result<stacked::PublicParams<Tree>> {
-    StackedDrg::<Tree, DefaultPieceHasher>::setup(&setup_params(sector_bytes, partitions)?)
+    StackedDrg::<Tree, DefaultPieceHasher>::setup(&setup_params(
+        sector_bytes,
+        partitions,
+        porep_id,
+    )?)
 }
 
 pub fn winning_post_public_params<Tree: 'static + MerkleTreeTrait>(
@@ -68,9 +74,19 @@ pub fn window_post_setup_params(post_config: &PoStConfig) -> WindowPostSetupPara
     }
 }
 
+fn drg_seed_from_porep_id(porep_id: [u8; 32]) -> [u8; 28] {
+    let mut drg_seed = [0; 28];
+
+    let hash = Sha256::new().chain(porep_id).chain(DRG_NONCE).result();
+
+    drg_seed.copy_from_slice(&hash[..28]);
+    drg_seed
+}
+
 pub fn setup_params(
     sector_bytes: PaddedBytesAmount,
     partitions: usize,
+    porep_id: [u8; 32],
 ) -> Result<stacked::SetupParams> {
     let layer_challenges = select_challenges(
         partitions,
@@ -97,11 +113,13 @@ pub fn setup_params(
     let degree = DRG_DEGREE;
     let expansion_degree = EXP_DEGREE;
 
+    let drg_seed = drg_seed_from_porep_id(porep_id);
+
     Ok(stacked::SetupParams {
         nodes,
         degree,
         expansion_degree,
-        seed: DRG_SEED,
+        seed: drg_seed,
         layer_challenges,
     })
 }

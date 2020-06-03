@@ -185,6 +185,7 @@ fn blank_porep_poseidon_circuit<Tree: MerkleTreeTrait>(
         vanilla_params: setup_params(
             PaddedBytesAmount::from(porep_config),
             usize::from(PoRepProofPartitions::from(porep_config)),
+            porep_config.porep_id,
         )
         .unwrap(),
         partitions: Some(usize::from(PoRepProofPartitions::from(porep_config))),

@@ -92,6 +92,7 @@ where
         vanilla_params: setup_params(
             PaddedBytesAmount::from(porep_config),
             usize::from(PoRepProofPartitions::from(porep_config)),
+            porep_config.porep_id,
         )?,
         partitions: Some(usize::from(PoRepProofPartitions::from(porep_config))),
         priority: false,
@@ -239,6 +240,7 @@ where
         vanilla_params: setup_params(
             PaddedBytesAmount::from(porep_config),
             usize::from(PoRepProofPartitions::from(porep_config)),
+            porep_config.porep_id,
         )?,
         partitions: Some(usize::from(PoRepProofPartitions::from(porep_config))),
         priority: false,
@@ -360,6 +362,7 @@ pub fn seal_commit_phase1<T: AsRef<Path>, Tree: 'static + MerkleTreeTrait>(
         vanilla_params: setup_params(
             PaddedBytesAmount::from(porep_config),
             usize::from(PoRepProofPartitions::from(porep_config)),
+            porep_config.porep_id,
         )?,
         partitions: Some(usize::from(PoRepProofPartitions::from(porep_config))),
         priority: false,
@@ -442,6 +445,7 @@ pub fn seal_commit_phase2<Tree: 'static + MerkleTreeTrait>(
         vanilla_params: setup_params(
             PaddedBytesAmount::from(porep_config),
             usize::from(PoRepProofPartitions::from(porep_config)),
+            porep_config.porep_id,
         )?,
         partitions: Some(usize::from(PoRepProofPartitions::from(porep_config))),
         priority: false,
@@ -541,6 +545,7 @@ pub fn verify_seal<Tree: 'static + MerkleTreeTrait>(
         vanilla_params: setup_params(
             PaddedBytesAmount::from(porep_config),
             usize::from(PoRepProofPartitions::from(porep_config)),
+            porep_config.porep_id,
         )?,
         partitions: Some(usize::from(PoRepProofPartitions::from(porep_config))),
         priority: false,
@@ -646,6 +651,7 @@ pub fn verify_batch_seal<Tree: 'static + MerkleTreeTrait>(
         vanilla_params: setup_params(
             PaddedBytesAmount::from(porep_config),
             usize::from(PoRepProofPartitions::from(porep_config)),
+            porep_config.porep_id,
         )?,
         partitions: Some(usize::from(PoRepProofPartitions::from(porep_config))),
         priority: false,

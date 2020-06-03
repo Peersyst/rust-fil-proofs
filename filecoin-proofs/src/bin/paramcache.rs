@@ -36,6 +36,7 @@ fn cache_porep_params<Tree: 'static + MerkleTreeTrait>(porep_config: PoRepConfig
     let public_params = public_params(
         PaddedBytesAmount::from(porep_config),
         usize::from(PoRepProofPartitions::from(porep_config)),
+        porep_config.porep_id,
     )
     .unwrap();
 

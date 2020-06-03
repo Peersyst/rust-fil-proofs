@@ -48,6 +48,7 @@ impl PoRepConfig {
         let params = crate::parameters::public_params::<Tree>(
             self.sector_size.into(),
             self.partitions.into(),
+            self.porep_id,
         )?;
 
         Ok(

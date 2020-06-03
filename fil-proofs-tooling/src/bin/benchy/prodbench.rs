@@ -330,9 +330,11 @@ fn cache_porep_params(porep_config: PoRepConfig) {
     use filecoin_proofs::parameters::public_params;
     use storage_proofs::porep::stacked::{StackedCompound, StackedDrg};
 
+    let dummy_porep_id = [0; 32];
     let public_params = public_params(
         PaddedBytesAmount::from(porep_config),
         usize::from(PoRepProofPartitions::from(porep_config)),
+        dummy_porep_id,
     )
     .unwrap();
 
