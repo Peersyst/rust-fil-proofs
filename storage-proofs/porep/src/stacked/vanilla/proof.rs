@@ -891,7 +891,7 @@ mod tests {
     use rand::{Rng, SeedableRng};
     use rand_xorshift::XorShiftRng;
     use storage_proofs_core::{
-        drgraph::{new_seed, BASE_DEGREE},
+        drgraph::BASE_DEGREE,
         fr32::fr_into_bytes,
         hasher::{Blake2sHasher, PedersenHasher, PoseidonHasher, Sha256Hasher},
         merkle::MerkleTreeTrait,
@@ -1011,7 +1011,7 @@ mod tests {
             nodes,
             degree: BASE_DEGREE,
             expansion_degree: EXP_DEGREE,
-            seed: new_seed(),
+            porep_id: [32; 32],
             layer_challenges: challenges.clone(),
         };
 
@@ -1188,7 +1188,7 @@ mod tests {
             nodes,
             degree,
             expansion_degree,
-            seed: new_seed(),
+            porep_id: [32; 32],
             layer_challenges: challenges.clone(),
         };
 
@@ -1269,7 +1269,7 @@ mod tests {
             nodes,
             degree,
             expansion_degree,
-            seed: new_seed(),
+            porep_id: [32; 32],
             layer_challenges: layer_challenges.clone(),
         };
 

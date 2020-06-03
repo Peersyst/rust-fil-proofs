@@ -272,7 +272,6 @@ fn run_measure_circuits(i: &ProdbenchInputs) -> CircuitOutputs {
 }
 
 fn measure_porep_circuit(i: &ProdbenchInputs) -> usize {
-    use storage_proofs::drgraph::new_seed;
     use storage_proofs::porep::stacked::{
         LayerChallenges, SetupParams, StackedCompound, StackedDrg,
     };
@@ -284,11 +283,12 @@ fn measure_porep_circuit(i: &ProdbenchInputs) -> usize {
     let nodes = (i.sector_size_bytes() / 32) as usize;
     let layer_challenges = LayerChallenges::new(layers, challenge_count);
 
+    let arbitrary_porep_id = [222; 32];
     let sp = SetupParams {
         nodes,
         degree: drg_degree,
         expansion_degree,
-        seed: new_seed(),
+        porep_id: arbitrary_porep_id,
         layer_challenges,
     };
 

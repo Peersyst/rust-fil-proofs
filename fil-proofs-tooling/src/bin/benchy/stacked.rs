@@ -120,11 +120,12 @@ where
         );
 
         let replica_id = H::Domain::random(rng);
+        let arbitrary_porep_id = [11; 32];
         let sp = stacked::SetupParams {
             nodes,
             degree: BASE_DEGREE,
             expansion_degree: EXP_DEGREE,
-            seed: new_seed(),
+            porep_id: arbitrary_porep_id,
             layer_challenges: layer_challenges.clone(),
         };
 
