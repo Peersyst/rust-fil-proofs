@@ -1,0 +1,19 @@
+version: "3"
+services:
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile-proofs
+    container_name: build
+    working_dir: /code
+    volumes:
+      - ./:/code
+    command: cargo build --release --all
+  test-all:
+    build:
+      context: .
+      dockerfile: Dockerfile-proofs
+    working_dir: /code
+    volumes:
+      - ./:/code
+    command: cargo test --all
